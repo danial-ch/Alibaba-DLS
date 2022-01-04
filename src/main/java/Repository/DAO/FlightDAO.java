@@ -32,16 +32,16 @@ public class FlightDAO implements Repository<Flight, Long> {
                     "select * from [Alibaba].[dbo].[Flight]"
             ));
             statements.put(FIND_BY_ID, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[Flight] where a.FlightID = ?"
+                    "select * from [Alibaba].[dbo].[Flight] where FlightID = ?"
             ));
             statements.put(DELETE_BY_ID, connection.prepareStatement(
-                    "delete from [Alibaba].[dbo].[Flight] a where a.FlightID = ?"
+                    "delete from [Alibaba].[dbo].[Flight] where FlightID = ?"
             ));
             statements.put(INSERT, connection.prepareStatement(
                     "insert into [Alibaba].[dbo].[Flight]([FlightID],[TicketType],[IsOneWay],[ArrivalTime],[ReturnFlightID]) values(?,?,?,?,?)"
             ));
             statements.put(UPDATE, connection.prepareStatement(
-                    "update [Alibaba].[dbo].[Flight] a set a.TicketType = ? , a.IsOneWay = ? , a.ArrivalTime = ? , a.ReturnFlightID = ? where a.FlightID = ?"
+                    "update [Alibaba].[dbo].[Flight] set TicketType = ? , IsOneWay = ? , ArrivalTime = ? , ReturnFlightID = ? where FlightID = ?"
             ));
         } catch (SQLException ex) {
             throw new RuntimeException(ex);

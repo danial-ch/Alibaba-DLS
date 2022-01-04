@@ -24,13 +24,18 @@ public final class RepositoryFacade {
         daos.put(BusCompany.class, new BusCompanyDAO(connection));
         daos.put(BusTrip.class, new BusTripDAO(connection));
         daos.put(Facility.class, new FacilityDAO(connection));
+        daos.put(FlightAirline.class, new FlightAirlineDAO(connection));
         daos.put(Flight.class, new FlightDAO(connection));
+        daos.put(ForeignFlightAirport.class, new ForeignFlightAirportDAO(connection));
         daos.put(ForeignFlight.class, new ForeignFlightDAO(connection));
         daos.put(Hotel.class, new HotelDAO(connection));
+        daos.put(HotelFacility.class, new HotelFacilityDAO(connection));
+        daos.put(HotelReserve.class, new HotelReserveDAO(connection));
         daos.put(InlandFlight.class, new InlandFlightDAO(connection));
         daos.put(Room.class, new RoomDAO(connection));
         daos.put(Transaction.class, new TransactionDAO(connection));
         daos.put(Trip.class, new TripDAO(connection));
+        daos.put(TripReserve.class, new TripReserveDAO(connection));
         daos.put(User.class, new UserDAO(connection));
     }
 
@@ -45,6 +50,15 @@ public final class RepositoryFacade {
         return INSTANCE;
     }
 
+    public static Connection getConnection(){
+        try {
+            return DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public <ID extends Serializable, T extends BaseEntity<ID>> List<T> findAll(Class<T> type) {
         Repository<?, ?> repository = daos.get(type);
         if (repository != null) {
@@ -53,19 +67,13 @@ public final class RepositoryFacade {
         return Collections.emptyList();
     }
 
-    public <ID extends Serializable, Entity extends BaseEntity<ID>> Entity findById(ID id, Class<Entity> type) {
+    public <ID extends Serializable, T extends BaseEntity<ID>> Optional<T>
+    findById(ID id, Class<T> type) {
 
         return Optional.ofNullable(daos.get(type))
-                .map(repo -> (Repository<Entity, ID>) repo).orElseThrow().findById(id);
+                .map(repo -> (Repository<T, ID>) repo)
+                .map(repo -> repo.findById(id));
     }
-
-//    public <ID extends Serializable, T extends BaseEntity<ID>> Optional<T>
-//    findById(ID id, Class<T> type) {
-//
-//        return Optional.ofNullable(daos.get(type))
-//                .map(repo -> (Repository<T, ID>) repo)
-//                .flatMap(repo -> repo.findById(id));
-//    }
 
     public <ID extends Serializable, T extends BaseEntity<ID>>
     boolean deleteByID(ID id, Class<T> type) {
@@ -76,7 +84,7 @@ public final class RepositoryFacade {
     }
 
     public <ID extends Serializable, T extends BaseEntity<ID>> Boolean
-    DeleteByIDs(Collection<ID> ids, Class<T> type) {
+    deleteByIDs(Collection<ID> ids, Class<T> type) {
         return Optional.ofNullable(daos.get(type))
                 .map(repo -> (Repository<T, ID>) repo)
                 .map(repo -> repo.DeleteByIDs(ids))
@@ -91,7 +99,13 @@ public final class RepositoryFacade {
                 .orElse(new ArrayList<>());
     }
 
-    public <ID extends Serializable, T extends BaseEntity<ID>> T save(T entity) {
-        return null;
+    public <ID extends Serializable, T extends BaseEntity<ID>> T save(T entity, Class<T> type) {
+        Repository<?, ?> repository = daos.get(type);
+        if (repository != null) {
+            return (((Repository<T, ID>) daos.get(type)).save(entity));
+        }
+        else {
+            return null;
+        }
     }
 }

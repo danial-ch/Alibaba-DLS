@@ -1,6 +1,7 @@
 package Repository.DAO;
 
-import Model.Room;
+import Model.Facility;
+import Model.HotelFacility;
 import Repository.Repository;
 
 import java.sql.Connection;
@@ -14,11 +15,11 @@ import java.util.List;
 
 import static Repository.DAO.StatementType.*;
 
-public class RoomDAO implements Repository<Room, Long> {
+public class HotelFacilityDAO implements Repository<HotelFacility, Long> {
 
     private final EnumMap<StatementType, PreparedStatement> statements;
 
-    RoomDAO(Connection connection) {
+    HotelFacilityDAO(Connection connection) {
         statements = new EnumMap<>(StatementType.class);
         prepareStatements(connection);
     }
@@ -26,19 +27,19 @@ public class RoomDAO implements Repository<Room, Long> {
     private void prepareStatements(Connection connection) {
         try {
             statements.put(FIND_ALL, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[Room]"
+                    "select * from [Alibaba].[dbo].[HotelFacility]"
             ));
             statements.put(FIND_BY_ID, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[Room] where RoomID = ?"
+                    "select * from [Alibaba].[dbo].[HotelFacility] where HotelFacilityID = ?"
             ));
             statements.put(DELETE_BY_ID, connection.prepareStatement(
-                    "delete from [Alibaba].[dbo].[Room] where RoomID = ?"
+                    "delete from [Alibaba].[dbo].[HotelFacility] where HotelFacilityID = ?"
             ));
             statements.put(INSERT, connection.prepareStatement(
-                    "insert into [Alibaba].[dbo].[Room]([RoomID],[IsVip],[NumberOfBeds],[BAndB],[HotelID],[HotelReserveID]) values(?,?,?,?,?,?)"
+                    "insert into [Alibaba].[dbo].[HotelFacility]([HotelFacilityID],[HotelID],[FacilityID]) values(?,?,?)"
             ));
             statements.put(UPDATE, connection.prepareStatement(
-                    "update [Alibaba].[dbo].[Room] set IsVip = ? , NumberOfBeds = ? , BAndB = ?,.HotelID = ? , HotelReserveID = ? where RoomID = ?"
+                    "update [Alibaba].[dbo].[HotelFacility] set HotelID = ? , FacilityID = ? where HotelFacilityID = ?"
             ));
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -46,20 +47,17 @@ public class RoomDAO implements Repository<Room, Long> {
     }
 
     @Override
-    public Room findById(Long id) {
+    public HotelFacility findById(Long id) {
         PreparedStatement statement = statements.get(FIND_BY_ID);
         try {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
-                Room room = new Room();
-                room.setVip(result.getBoolean("IsVip"));
-                room.setNumberOfBeds(result.getInt("NumberOfBeds"));
-                room.setbAndB(result.getBoolean("BAndB"));
-                room.setHotelId(result.getInt("HotelID"));
-                room.setHotelReserveId(result.getInt("HotelReserveID"));
-                room.setId(result.getLong(1));
-                return room;
+                HotelFacility hotelFacility = new HotelFacility();
+                hotelFacility.setHotelId(result.getInt("HotelID"));
+                hotelFacility.setFacilityId(result.getInt("FacilityID"));
+                hotelFacility.setId(result.getLong(1));
+                return hotelFacility;
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -68,52 +66,46 @@ public class RoomDAO implements Repository<Room, Long> {
     }
 
     @Override
-    public List<Room> findByIDs(Collection<Long> longs) {
+    public List<HotelFacility> findByIDs(Collection<Long> longs) {
         PreparedStatement statement = statements.get(FIND_BY_ID);
         ResultSet result;
-        List<Room> rooms = new ArrayList<>();
+        List<HotelFacility> hotelFacilities = new ArrayList<>();
         try {
             for (Long id : longs) {
                 statement.setLong(1, id);
                 result = statement.executeQuery();
                 while (result.next()) {
-                    Room room = new Room();
-                    room.setVip(result.getBoolean("IsVip"));
-                    room.setNumberOfBeds(result.getInt("NumberOfBeds"));
-                    room.setbAndB(result.getBoolean("BAndB"));
-                    room.setHotelId(result.getInt("HotelID"));
-                    room.setHotelReserveId(result.getInt("HotelReserveID"));
-                    room.setId(result.getLong(1));
-                    rooms.add(room);
+                    HotelFacility hotelFacility = new HotelFacility();
+                    hotelFacility.setHotelId(result.getInt("HotelID"));
+                    hotelFacility.setFacilityId(result.getInt("FacilityID"));
+                    hotelFacility.setId(result.getLong(1));
+                    hotelFacilities.add(hotelFacility);
                 }
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return rooms;
+        return hotelFacilities;
     }
 
     @Override
-    public List<Room> findAll() {
+    public List<HotelFacility> findAll() {
         PreparedStatement statement = statements.get(FIND_ALL);
         ResultSet result;
-        List<Room> rooms = new ArrayList<>();
+        List<HotelFacility> hotelFacilities = new ArrayList<>();
         try {
             result = statement.executeQuery();
             while (result.next()) {
-                Room room = new Room();
-                room.setVip(result.getBoolean("IsVip"));
-                room.setNumberOfBeds(result.getInt("NumberOfBeds"));
-                room.setbAndB(result.getBoolean("BAndB"));
-                room.setHotelId(result.getInt("HotelID"));
-                room.setHotelReserveId(result.getInt("HotelReserveID"));
-                room.setId(result.getLong(1));
-                rooms.add(room);
+                HotelFacility hotelFacility = new HotelFacility();
+                hotelFacility.setHotelId(result.getInt("HotelID"));
+                hotelFacility.setFacilityId(result.getInt("FacilityID"));
+                hotelFacility.setId(result.getLong(1));
+                hotelFacilities.add(hotelFacility);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return rooms;
+        return hotelFacilities;
     }
 
     @Override
@@ -150,17 +142,14 @@ public class RoomDAO implements Repository<Room, Long> {
     }
 
     @Override
-    public Room save(Room E) {
-        Room room  = findById(E.getId());
-        if(room != null){
+    public HotelFacility save(HotelFacility E) {
+        HotelFacility hotelFacility  = findById(E.getId());
+        if(hotelFacility != null){
             PreparedStatement statement = statements.get(UPDATE);
             try {
-                statement.setBoolean(1,E.isVip());
-                statement.setInt(2,E.getNumberOfBeds());
-                statement.setBoolean(3,E.isbAndB());
-                statement.setInt(4,E.getHotelId());
-                statement.setInt(5,E.getHotelReserveId());
-                statement.setLong(6, E.getId());
+                statement.setLong(1, E.getHotelId());
+                statement.setLong(2, E.getFacilityId());
+                statement.setLong(3, E.getId());
                 statement.execute();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -170,11 +159,8 @@ public class RoomDAO implements Repository<Room, Long> {
             PreparedStatement statement = statements.get(INSERT);
             try {
                 statement.setLong(1, E.getId());
-                statement.setBoolean(2,E.isVip());
-                statement.setInt(3,E.getNumberOfBeds());
-                statement.setBoolean(4,E.isbAndB());
-                statement.setInt(5,E.getHotelId());
-                statement.setInt(6,E.getHotelReserveId());
+                statement.setLong(2, E.getHotelId());
+                statement.setLong(3, E.getFacilityId());
                 statement.execute();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();

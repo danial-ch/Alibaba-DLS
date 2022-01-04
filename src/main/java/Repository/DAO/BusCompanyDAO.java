@@ -29,16 +29,16 @@ public class BusCompanyDAO implements Repository<BusCompany, Long> {
                     "select * from [Alibaba].[dbo].[BusCompany]"
             ));
             statements.put(FIND_BY_ID, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[BusCompany] where a.BusCompanyID = ?"
+                    "select * from [Alibaba].[dbo].[BusCompany] where BusCompanyID = ?"
             ));
             statements.put(DELETE_BY_ID, connection.prepareStatement(
-                    "delete from [Alibaba].[dbo].[BusCompany] a where a.BusCompanyID = ?"
+                    "delete from [Alibaba].[dbo].[BusCompany] where BusCompanyID = ?"
             ));
             statements.put(INSERT, connection.prepareStatement(
                     "insert into [Alibaba].[dbo].[BusCompany]([BusCompanyID],[Name]) values(?,?)"
             ));
             statements.put(UPDATE, connection.prepareStatement(
-                    "update [Alibaba].[dbo].[BusCompany] a set a.Name = ? where a.BusCompanyID = ?"
+                    "update [Alibaba].[dbo].[BusCompany] set [Name] = ? where BusCompanyID = ?"
             ));
         } catch (SQLException ex) {
             throw new RuntimeException(ex);

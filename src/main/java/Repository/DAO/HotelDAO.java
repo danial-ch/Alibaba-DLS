@@ -30,18 +30,18 @@ public class HotelDAO implements Repository<Hotel, Long> {
                     "select * from [Alibaba].[dbo].[Hotel]"
             ));
             statements.put(FIND_BY_ID, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[Hotel] where a.HotelID = ?"
+                    "select * from [Alibaba].[dbo].[Hotel] where HotelID = ?"
             ));
             statements.put(DELETE_BY_ID, connection.prepareStatement(
-                    "delete from [Alibaba].[dbo].[Hotel] a where a.HotelID = ?"
+                    "delete from [Alibaba].[dbo].[Hotel] where HotelID = ?"
             ));
             statements.put(INSERT, connection.prepareStatement(
                     "insert into [Alibaba].[dbo].[Hotel]([HotelID],[Name],[City],[Location],[MinPrice],[MaxPrice],[Rating]," +
                             "[Popularity],[ResidenceType],[IsVip]) values(?,?,?,?,?,?,?,?,?,?)"
             ));
             statements.put(UPDATE, connection.prepareStatement(
-                    "update [Alibaba].[dbo].[Hotel] a set a.Name = ? , a.City = ? , a.Location = ? , a.MinPrice = ? ," +
-                            " a.MaxPrice = ? , a.Rating = ? , a.Popularity = ? , a.ResidenceType = ? , a.IsVip = ? where a.HotelID = ?"
+                    "update [Alibaba].[dbo].[Hotel] set [Name] = ? , City = ? , Location = ? , MinPrice = ? ," +
+                            " MaxPrice = ? , Rating = ? , Popularity = ? , ResidenceType = ? , IsVip = ? where HotelID = ?"
             ));
         } catch (SQLException ex) {
             throw new RuntimeException(ex);

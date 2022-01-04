@@ -34,10 +34,10 @@ public class InlandFlightDAO implements Repository<InlandFlight, Long> {
                     "select * from [Alibaba].[dbo].[InlandFlight]"
             ));
             statements.put(FIND_BY_ID, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[InlandFlight] where a.InlandFlightID = ?"
+                    "select * from [Alibaba].[dbo].[InlandFlight] where InlandFlightID = ?"
             ));
             statements.put(DELETE_BY_ID, connection.prepareStatement(
-                    "delete from [Alibaba].[dbo].[InlandFlight] a where a.InlandFlightID = ?"
+                    "delete from [Alibaba].[dbo].[InlandFlight] where InlandFlightID = ?"
             ));
             statements.put(INSERT, connection.prepareStatement(
                     "insert into [Alibaba].[dbo].[InlandFlight]([InlandFlightID]) values(?)"

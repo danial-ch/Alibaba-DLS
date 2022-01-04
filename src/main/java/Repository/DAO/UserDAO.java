@@ -30,19 +30,19 @@ public class UserDAO implements Repository<User, Long> {
                     "select * from [Alibaba].[dbo].[User]"
             ));
             statements.put(FIND_BY_ID, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[User] where a.UserID = ?"
+                    "select * from [Alibaba].[dbo].[User] where UserID = ?"
             ));
             statements.put(DELETE_BY_ID, connection.prepareStatement(
-                    "delete from [Alibaba].[dbo].[User] a where a.UserID = ?"
+                    "delete from [Alibaba].[dbo].[User] where UserID = ?"
             ));
             statements.put(INSERT, connection.prepareStatement(
                     "insert into [Alibaba].[dbo].[User]([UserID],[Name],[Password],[PhoneNumber],[Email],[Credit],[NationalCode," +
                             "[Gender],[DateOfBirth],[Telephone],[AccountNumber],[LastName],[SignUpDate]]) values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
             ));
             statements.put(UPDATE, connection.prepareStatement(
-                    "update [Alibaba].[dbo].[User] a set a.Name = ? , a.Password = ? , a.PhoneNumber = ? , a.Email = ?" +
-                            ", a.Credit = ? , a.NationalCode = ? , a.Gender = ? , a.DateOfBirth = ? , a.Telephone = ? , a.AccountNumber = ?" +
-                            ", a.LastName = ? , a.SignUpDate = ? where a.UserID = ?"
+                    "update [Alibaba].[dbo].[User] set [Name] = ? , Password = ? , PhoneNumber = ? , Email = ?" +
+                            ", Credit = ? , NationalCode = ? , Gender = ? , DateOfBirth = ? , Telephone = ? , AccountNumber = ?" +
+                            ", LastName = ? , SignUpDate = ? where UserID = ?"
             ));
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -69,6 +69,7 @@ public class UserDAO implements Repository<User, Long> {
                 user.setAccountNumber(result.getString("AccountNumber"));
                 user.setLastName(result.getString("LastName"));
                 user.setSignUpDate(result.getDate("SignUpDate"));
+                user.setPhoneNumber(result.getString("PhoneNumber"));
                 user.setId(result.getLong(1));
                 return user;
             }
@@ -101,6 +102,7 @@ public class UserDAO implements Repository<User, Long> {
                     user.setAccountNumber(result.getString("AccountNumber"));
                     user.setLastName(result.getString("LastName"));
                     user.setSignUpDate(result.getDate("SignUpDate"));
+                    user.setPhoneNumber(result.getString("PhoneNumber"));
                     user.setId(result.getLong(1));
                     users.add(user);
                 }
@@ -132,6 +134,7 @@ public class UserDAO implements Repository<User, Long> {
                 user.setAccountNumber(result.getString("AccountNumber"));
                 user.setLastName(result.getString("LastName"));
                 user.setSignUpDate(result.getDate("SignUpDate"));
+                user.setPhoneNumber(result.getString("PhoneNumber"));
                 user.setId(result.getLong(1));
                 users.add(user);
             }

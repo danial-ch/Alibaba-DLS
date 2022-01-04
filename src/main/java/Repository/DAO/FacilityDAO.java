@@ -29,16 +29,16 @@ public class FacilityDAO implements Repository<Facility, Long> {
                     "select * from [Alibaba].[dbo].[Facility]"
             ));
             statements.put(FIND_BY_ID, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[Facility] where a.FacilityID = ?"
+                    "select * from [Alibaba].[dbo].[Facility] where FacilityID = ?"
             ));
             statements.put(DELETE_BY_ID, connection.prepareStatement(
-                    "delete from [Alibaba].[dbo].[Facility] a where a.FacilityID = ?"
+                    "delete from [Alibaba].[dbo].[Facility] where FacilityID = ?"
             ));
             statements.put(INSERT, connection.prepareStatement(
                     "insert into [Alibaba].[dbo].[Facility]([FacilityID],[FacilityName]) values(?,?)"
             ));
             statements.put(UPDATE, connection.prepareStatement(
-                    "update [Alibaba].[dbo].[Facility] a set a.FacilityName = ? where a.FacilityID = ?"
+                    "update [Alibaba].[dbo].[Facility] set FacilityName = ? where FacilityID = ?"
             ));
         } catch (SQLException ex) {
             throw new RuntimeException(ex);

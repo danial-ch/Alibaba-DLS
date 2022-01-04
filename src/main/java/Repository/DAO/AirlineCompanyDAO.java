@@ -18,7 +18,7 @@ public class AirlineCompanyDAO implements Repository<AirlineCompany, Long> {
 
     private final EnumMap<StatementType, PreparedStatement> statements;
 
-    AirlineCompanyDAO(Connection connection) {
+    public AirlineCompanyDAO(Connection connection) {
         statements = new EnumMap<>(StatementType.class);
         prepareStatements(connection);
     }
@@ -29,16 +29,16 @@ public class AirlineCompanyDAO implements Repository<AirlineCompany, Long> {
                     "select * from [Alibaba].[dbo].[AirlineCompany]"
             ));
             statements.put(FIND_BY_ID, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[AirlineCompany] where a.AirlineID = ?"
+                    "select * from [Alibaba].[dbo].[AirlineCompany] where AirlineID = ?"
             ));
             statements.put(DELETE_BY_ID, connection.prepareStatement(
-                    "delete from [Alibaba].[dbo].[AirlineCompany] a where a.AirlineID = ?"
+                    "delete from [Alibaba].[dbo].[AirlineCompany] where AirlineID = ?"
             ));
             statements.put(INSERT, connection.prepareStatement(
                     "insert into [Alibaba].[dbo].[AirlineCompany]([AirlineID],[AirlineName]) values(?,?)"
             ));
             statements.put(UPDATE, connection.prepareStatement(
-                    "update [Alibaba].[dbo].[AirlineCompany] a set a.AirlineName = ? where a.AirlineID = ?"
+                    "update [Alibaba].[dbo].[AirlineCompany] set AirlineName = ? where AirlineID = ?"
             ));
         } catch (SQLException ex) {
             throw new RuntimeException(ex);

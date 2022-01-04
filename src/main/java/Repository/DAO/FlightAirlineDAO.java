@@ -1,6 +1,7 @@
 package Repository.DAO;
 
-import Model.Room;
+import Model.Facility;
+import Model.FlightAirline;
 import Repository.Repository;
 
 import java.sql.Connection;
@@ -14,11 +15,11 @@ import java.util.List;
 
 import static Repository.DAO.StatementType.*;
 
-public class RoomDAO implements Repository<Room, Long> {
+public class FlightAirlineDAO implements Repository<FlightAirline, Long> {
 
     private final EnumMap<StatementType, PreparedStatement> statements;
 
-    RoomDAO(Connection connection) {
+    FlightAirlineDAO(Connection connection) {
         statements = new EnumMap<>(StatementType.class);
         prepareStatements(connection);
     }
@@ -26,19 +27,19 @@ public class RoomDAO implements Repository<Room, Long> {
     private void prepareStatements(Connection connection) {
         try {
             statements.put(FIND_ALL, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[Room]"
+                    "select * from [Alibaba].[dbo].[FlightAirline]"
             ));
             statements.put(FIND_BY_ID, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[Room] where RoomID = ?"
+                    "select * from [Alibaba].[dbo].[FlightAirline] where FlightAirlineID = ?"
             ));
             statements.put(DELETE_BY_ID, connection.prepareStatement(
-                    "delete from [Alibaba].[dbo].[Room] where RoomID = ?"
+                    "delete from [Alibaba].[dbo].[FlightAirline] where FlightAirlineID = ?"
             ));
             statements.put(INSERT, connection.prepareStatement(
-                    "insert into [Alibaba].[dbo].[Room]([RoomID],[IsVip],[NumberOfBeds],[BAndB],[HotelID],[HotelReserveID]) values(?,?,?,?,?,?)"
+                    "insert into [Alibaba].[dbo].[FlightAirline]([FlightAirlineID],[FlightID],[AirlineID]) values(?,?,?)"
             ));
             statements.put(UPDATE, connection.prepareStatement(
-                    "update [Alibaba].[dbo].[Room] set IsVip = ? , NumberOfBeds = ? , BAndB = ?,.HotelID = ? , HotelReserveID = ? where RoomID = ?"
+                    "update [Alibaba].[dbo].[FlightAirline] set FlightID = ? , AirlineID = ? where FlightAirlineID = ?"
             ));
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -46,20 +47,17 @@ public class RoomDAO implements Repository<Room, Long> {
     }
 
     @Override
-    public Room findById(Long id) {
+    public FlightAirline findById(Long id) {
         PreparedStatement statement = statements.get(FIND_BY_ID);
         try {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
-                Room room = new Room();
-                room.setVip(result.getBoolean("IsVip"));
-                room.setNumberOfBeds(result.getInt("NumberOfBeds"));
-                room.setbAndB(result.getBoolean("BAndB"));
-                room.setHotelId(result.getInt("HotelID"));
-                room.setHotelReserveId(result.getInt("HotelReserveID"));
-                room.setId(result.getLong(1));
-                return room;
+                FlightAirline flightAirline = new FlightAirline();
+                flightAirline.setFlightId(result.getInt("FlightID"));
+                flightAirline.setAirlineId(result.getInt("AirlineID"));
+                flightAirline.setId(result.getLong(1));
+                return flightAirline;
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -68,52 +66,46 @@ public class RoomDAO implements Repository<Room, Long> {
     }
 
     @Override
-    public List<Room> findByIDs(Collection<Long> longs) {
+    public List<FlightAirline> findByIDs(Collection<Long> longs) {
         PreparedStatement statement = statements.get(FIND_BY_ID);
         ResultSet result;
-        List<Room> rooms = new ArrayList<>();
+        List<FlightAirline> flightAirlines = new ArrayList<>();
         try {
             for (Long id : longs) {
                 statement.setLong(1, id);
                 result = statement.executeQuery();
                 while (result.next()) {
-                    Room room = new Room();
-                    room.setVip(result.getBoolean("IsVip"));
-                    room.setNumberOfBeds(result.getInt("NumberOfBeds"));
-                    room.setbAndB(result.getBoolean("BAndB"));
-                    room.setHotelId(result.getInt("HotelID"));
-                    room.setHotelReserveId(result.getInt("HotelReserveID"));
-                    room.setId(result.getLong(1));
-                    rooms.add(room);
+                    FlightAirline flightAirline = new FlightAirline();
+                    flightAirline.setFlightId(result.getInt("FlightID"));
+                    flightAirline.setAirlineId(result.getInt("AirlineID"));
+                    flightAirline.setId(result.getLong(1));
+                    flightAirlines.add(flightAirline);
                 }
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return rooms;
+        return flightAirlines;
     }
 
     @Override
-    public List<Room> findAll() {
+    public List<FlightAirline> findAll() {
         PreparedStatement statement = statements.get(FIND_ALL);
         ResultSet result;
-        List<Room> rooms = new ArrayList<>();
+        List<FlightAirline> flightAirlines = new ArrayList<>();
         try {
             result = statement.executeQuery();
             while (result.next()) {
-                Room room = new Room();
-                room.setVip(result.getBoolean("IsVip"));
-                room.setNumberOfBeds(result.getInt("NumberOfBeds"));
-                room.setbAndB(result.getBoolean("BAndB"));
-                room.setHotelId(result.getInt("HotelID"));
-                room.setHotelReserveId(result.getInt("HotelReserveID"));
-                room.setId(result.getLong(1));
-                rooms.add(room);
+                FlightAirline flightAirline = new FlightAirline();
+                flightAirline.setFlightId(result.getInt("FlightID"));
+                flightAirline.setAirlineId(result.getInt("AirlineID"));
+                flightAirline.setId(result.getLong(1));
+                flightAirlines.add(flightAirline);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return rooms;
+        return flightAirlines;
     }
 
     @Override
@@ -150,17 +142,14 @@ public class RoomDAO implements Repository<Room, Long> {
     }
 
     @Override
-    public Room save(Room E) {
-        Room room  = findById(E.getId());
-        if(room != null){
+    public FlightAirline save(FlightAirline E) {
+        FlightAirline flightAirline  = findById(E.getId());
+        if(flightAirline != null){
             PreparedStatement statement = statements.get(UPDATE);
             try {
-                statement.setBoolean(1,E.isVip());
-                statement.setInt(2,E.getNumberOfBeds());
-                statement.setBoolean(3,E.isbAndB());
-                statement.setInt(4,E.getHotelId());
-                statement.setInt(5,E.getHotelReserveId());
-                statement.setLong(6, E.getId());
+                statement.setLong(1, E.getFlightId());
+                statement.setLong(2, E.getAirlineId());
+                statement.setLong(3, E.getId());
                 statement.execute();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -170,11 +159,8 @@ public class RoomDAO implements Repository<Room, Long> {
             PreparedStatement statement = statements.get(INSERT);
             try {
                 statement.setLong(1, E.getId());
-                statement.setBoolean(2,E.isVip());
-                statement.setInt(3,E.getNumberOfBeds());
-                statement.setBoolean(4,E.isbAndB());
-                statement.setInt(5,E.getHotelId());
-                statement.setInt(6,E.getHotelReserveId());
+                statement.setLong(2, E.getFlightId());
+                statement.setLong(3, E.getAirlineId());
                 statement.execute();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();

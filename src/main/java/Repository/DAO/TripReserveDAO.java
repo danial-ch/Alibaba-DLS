@@ -1,6 +1,7 @@
 package Repository.DAO;
 
-import Model.Room;
+import Model.Transaction;
+import Model.TripReserve;
 import Repository.Repository;
 
 import java.sql.Connection;
@@ -14,11 +15,11 @@ import java.util.List;
 
 import static Repository.DAO.StatementType.*;
 
-public class RoomDAO implements Repository<Room, Long> {
+public class TripReserveDAO implements Repository<TripReserve, Long> {
 
     private final EnumMap<StatementType, PreparedStatement> statements;
 
-    RoomDAO(Connection connection) {
+    TripReserveDAO(Connection connection) {
         statements = new EnumMap<>(StatementType.class);
         prepareStatements(connection);
     }
@@ -26,19 +27,19 @@ public class RoomDAO implements Repository<Room, Long> {
     private void prepareStatements(Connection connection) {
         try {
             statements.put(FIND_ALL, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[Room]"
+                    "select * from [Alibaba].[dbo].[TripReserve]"
             ));
             statements.put(FIND_BY_ID, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[Room] where RoomID = ?"
+                    "select * from [Alibaba].[dbo].[TripReserve] where ReserveID = ?"
             ));
             statements.put(DELETE_BY_ID, connection.prepareStatement(
-                    "delete from [Alibaba].[dbo].[Room] where RoomID = ?"
+                    "delete from [Alibaba].[dbo].[TripReserve] where ReserveID = ?"
             ));
             statements.put(INSERT, connection.prepareStatement(
-                    "insert into [Alibaba].[dbo].[Room]([RoomID],[IsVip],[NumberOfBeds],[BAndB],[HotelID],[HotelReserveID]) values(?,?,?,?,?,?)"
+                    "insert into [Alibaba].[dbo].[TripReserve]([ReserveID],[ReserveNumber],[PassengerCount],[UserID],[TripID],[Price],[SeatNumber]) values(?,?,?,?,?,?,?)"
             ));
             statements.put(UPDATE, connection.prepareStatement(
-                    "update [Alibaba].[dbo].[Room] set IsVip = ? , NumberOfBeds = ? , BAndB = ?,.HotelID = ? , HotelReserveID = ? where RoomID = ?"
+                    "update [Alibaba].[dbo].[TripReserve] set ReserveNumber = ? , PassengerCount = ? , UserID = ? , TripID = ? , Price = ? , SeatNumber = ? where ReserveID = ?"
             ));
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -46,20 +47,21 @@ public class RoomDAO implements Repository<Room, Long> {
     }
 
     @Override
-    public Room findById(Long id) {
+    public TripReserve findById(Long id) {
         PreparedStatement statement = statements.get(FIND_BY_ID);
         try {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
-                Room room = new Room();
-                room.setVip(result.getBoolean("IsVip"));
-                room.setNumberOfBeds(result.getInt("NumberOfBeds"));
-                room.setbAndB(result.getBoolean("BAndB"));
-                room.setHotelId(result.getInt("HotelID"));
-                room.setHotelReserveId(result.getInt("HotelReserveID"));
-                room.setId(result.getLong(1));
-                return room;
+                TripReserve tripReserve = new TripReserve();
+                tripReserve.setReserveNumber(result.getString("ReserveNumber"));
+                tripReserve.setPassengerCont(result.getInt("PassengerCount"));
+                tripReserve.setUserId(result.getInt("UserID"));
+                tripReserve.setTripId(result.getInt("TripID"));
+                tripReserve.setPrice(result.getDouble("Price"));
+                tripReserve.setSeatNumber(result.getInt("SeatNumber"));
+                tripReserve.setId(result.getLong(1));
+                return tripReserve;
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -68,52 +70,54 @@ public class RoomDAO implements Repository<Room, Long> {
     }
 
     @Override
-    public List<Room> findByIDs(Collection<Long> longs) {
+    public List<TripReserve> findByIDs(Collection<Long> longs) {
         PreparedStatement statement = statements.get(FIND_BY_ID);
         ResultSet result;
-        List<Room> rooms = new ArrayList<>();
+        List<TripReserve> tripReserves = new ArrayList<>();
         try {
             for (Long id : longs) {
                 statement.setLong(1, id);
                 result = statement.executeQuery();
                 while (result.next()) {
-                    Room room = new Room();
-                    room.setVip(result.getBoolean("IsVip"));
-                    room.setNumberOfBeds(result.getInt("NumberOfBeds"));
-                    room.setbAndB(result.getBoolean("BAndB"));
-                    room.setHotelId(result.getInt("HotelID"));
-                    room.setHotelReserveId(result.getInt("HotelReserveID"));
-                    room.setId(result.getLong(1));
-                    rooms.add(room);
+                    TripReserve tripReserve = new TripReserve();
+                    tripReserve.setReserveNumber(result.getString("ReserveNumber"));
+                    tripReserve.setPassengerCont(result.getInt("PassengerCount"));
+                    tripReserve.setUserId(result.getInt("UserID"));
+                    tripReserve.setTripId(result.getInt("TripID"));
+                    tripReserve.setPrice(result.getDouble("Price"));
+                    tripReserve.setSeatNumber(result.getInt("SeatNumber"));
+                    tripReserve.setId(result.getLong(1));
+                    tripReserves.add(tripReserve);
                 }
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return rooms;
+        return tripReserves;
     }
 
     @Override
-    public List<Room> findAll() {
+    public List<TripReserve> findAll() {
         PreparedStatement statement = statements.get(FIND_ALL);
         ResultSet result;
-        List<Room> rooms = new ArrayList<>();
+        List<TripReserve> tripReserves = new ArrayList<>();
         try {
             result = statement.executeQuery();
             while (result.next()) {
-                Room room = new Room();
-                room.setVip(result.getBoolean("IsVip"));
-                room.setNumberOfBeds(result.getInt("NumberOfBeds"));
-                room.setbAndB(result.getBoolean("BAndB"));
-                room.setHotelId(result.getInt("HotelID"));
-                room.setHotelReserveId(result.getInt("HotelReserveID"));
-                room.setId(result.getLong(1));
-                rooms.add(room);
+                TripReserve tripReserve = new TripReserve();
+                tripReserve.setReserveNumber(result.getString("ReserveNumber"));
+                tripReserve.setPassengerCont(result.getInt("PassengerCount"));
+                tripReserve.setUserId(result.getInt("UserID"));
+                tripReserve.setTripId(result.getInt("TripID"));
+                tripReserve.setPrice(result.getDouble("Price"));
+                tripReserve.setSeatNumber(result.getInt("SeatNumber"));
+                tripReserve.setId(result.getLong(1));
+                tripReserves.add(tripReserve);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return rooms;
+        return tripReserves;
     }
 
     @Override
@@ -150,17 +154,18 @@ public class RoomDAO implements Repository<Room, Long> {
     }
 
     @Override
-    public Room save(Room E) {
-        Room room  = findById(E.getId());
-        if(room != null){
+    public TripReserve save(TripReserve E) {
+        TripReserve tripReserve  = findById(E.getId());
+        if(tripReserve != null){
             PreparedStatement statement = statements.get(UPDATE);
             try {
-                statement.setBoolean(1,E.isVip());
-                statement.setInt(2,E.getNumberOfBeds());
-                statement.setBoolean(3,E.isbAndB());
-                statement.setInt(4,E.getHotelId());
-                statement.setInt(5,E.getHotelReserveId());
-                statement.setLong(6, E.getId());
+                statement.setString(1,E.getReserveNumber());
+                statement.setInt(2,E.getPassengerCont());
+                statement.setLong(3,E.getUserId());
+                statement.setLong(4, E.getTripId());
+                statement.setDouble(5, E.getPrice());
+                statement.setInt(6, E.getSeatNumber());
+                statement.setLong(7, E.getId());
                 statement.execute();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -170,11 +175,12 @@ public class RoomDAO implements Repository<Room, Long> {
             PreparedStatement statement = statements.get(INSERT);
             try {
                 statement.setLong(1, E.getId());
-                statement.setBoolean(2,E.isVip());
-                statement.setInt(3,E.getNumberOfBeds());
-                statement.setBoolean(4,E.isbAndB());
-                statement.setInt(5,E.getHotelId());
-                statement.setInt(6,E.getHotelReserveId());
+                statement.setString(2,E.getReserveNumber());
+                statement.setInt(3,E.getPassengerCont());
+                statement.setLong(4,E.getUserId());
+                statement.setLong(5, E.getTripId());
+                statement.setDouble(6, E.getPrice());
+                statement.setInt(7, E.getSeatNumber());
                 statement.execute();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();

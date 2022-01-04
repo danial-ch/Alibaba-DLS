@@ -30,16 +30,16 @@ public class TripDAO implements Repository<Trip, Long> {
                     "select * from [Alibaba].[dbo].[Trip]"
             ));
             statements.put(FIND_BY_ID, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[Trip] where a.TripID = ?"
+                    "select * from [Alibaba].[dbo].[Trip] where TripID = ?"
             ));
             statements.put(DELETE_BY_ID, connection.prepareStatement(
-                    "delete from [Alibaba].[dbo].[Trip] a where a.TripID = ?"
+                    "delete from [Alibaba].[dbo].[Trip] where TripID = ?"
             ));
             statements.put(INSERT, connection.prepareStatement(
                     "insert into [Alibaba].[dbo].[Trip]([TripID],[Origin],[Destination],[DepartureTime],[Capacity]) values(?,?,?,?,?)"
             ));
             statements.put(UPDATE, connection.prepareStatement(
-                    "update [Alibaba].[dbo].[Trip] a set a.Origin = ? , a.Destination = ? , a.DepartureTime = ? , a.Capacity = ? where a.TripID = ?"
+                    "update [Alibaba].[dbo].[Trip] set Origin = ? , Destination = ? , DepartureTime = ? , Capacity = ? where TripID = ?"
             ));
         } catch (SQLException ex) {
             throw new RuntimeException(ex);

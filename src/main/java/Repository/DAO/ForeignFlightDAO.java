@@ -33,16 +33,16 @@ public class ForeignFlightDAO implements Repository<ForeignFlight, Long> {
                     "select * from [Alibaba].[dbo].[ForeignFlight]"
             ));
             statements.put(FIND_BY_ID, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[ForeignFlight] where a.ForeignFlightID = ?"
+                    "select * from [Alibaba].[dbo].[ForeignFlight] where ForeignFlightID = ?"
             ));
             statements.put(DELETE_BY_ID, connection.prepareStatement(
-                    "delete from [Alibaba].[dbo].[ForeignFlight] a where a.ForeignFlightID = ?"
+                    "delete from [Alibaba].[dbo].[ForeignFlight] where ForeignFlightID = ?"
             ));
             statements.put(INSERT, connection.prepareStatement(
                     "insert into [Alibaba].[dbo].[ForeignFlight]([ForeignFlightID],[FlightDuration],[NumberOfStops]) values(?,?,?)"
             ));
             statements.put(UPDATE, connection.prepareStatement(
-                    "update [Alibaba].[dbo].[ForeignFlight] a set a.FlightDuration = ? , a.NumberOfStops = ? where a.ForeignFlightID = ?"
+                    "update [Alibaba].[dbo].[ForeignFlight] set FlightDuration = ? , NumberOfStops = ? where ForeignFlightID = ?"
             ));
         } catch (SQLException ex) {
             throw new RuntimeException(ex);

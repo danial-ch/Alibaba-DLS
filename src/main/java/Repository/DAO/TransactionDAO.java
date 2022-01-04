@@ -30,16 +30,16 @@ public class TransactionDAO implements Repository<Transaction, Long> {
                     "select * from [Alibaba].[dbo].[Transaction]"
             ));
             statements.put(FIND_BY_ID, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[Transaction] where a.TransID = ?"
+                    "select * from [Alibaba].[dbo].[Transaction] where TransID = ?"
             ));
             statements.put(DELETE_BY_ID, connection.prepareStatement(
-                    "delete from [Alibaba].[dbo].[Transaction] a where a.TransID = ?"
+                    "delete from [Alibaba].[dbo].[Transaction] where TransID = ?"
             ));
             statements.put(INSERT, connection.prepareStatement(
                     "insert into [Alibaba].[dbo].[Transaction]([TransID],[TransTime],[Amount],[Type],[UserID]) values(?,?,?,?,?)"
             ));
             statements.put(UPDATE, connection.prepareStatement(
-                    "update [Alibaba].[dbo].[Transaction] a set a.TransTime = ? , a.Amount = ? , a.Type = ? , a.UserID = ? where a.TransID = ?"
+                    "update [Alibaba].[dbo].[Transaction] set TransTime = ? , Amount = ? , [Type] = ? , UserID = ? where TransID = ?"
             ));
         } catch (SQLException ex) {
             throw new RuntimeException(ex);

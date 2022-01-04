@@ -8,6 +8,7 @@ public class AirlineCompany extends BaseEntity<Long>{
     }
 
     public AirlineCompany(String airlineName) {
+        this.airlineName = airlineName;
     }
 
     public String getAirlineName() {

@@ -33,16 +33,16 @@ public class BusTripDAO implements Repository<BusTrip, Long> {
                     "select * from [Alibaba].[dbo].[BusTrip]"
             ));
             statements.put(FIND_BY_ID, connection.prepareStatement(
-                    "select * from [Alibaba].[dbo].[BusTrip] where a.BusTripID = ?"
+                    "select * from [Alibaba].[dbo].[BusTrip] where BusTripID = ?"
             ));
             statements.put(DELETE_BY_ID, connection.prepareStatement(
-                    "delete from [Alibaba].[dbo].[BusTrip] a where a.BusTripID = ?"
+                    "delete from [Alibaba].[dbo].[BusTrip] where BusTripID = ?"
             ));
             statements.put(INSERT, connection.prepareStatement(
                     "insert into [Alibaba].[dbo].[BusTrip]([BusTripID],[FinalStop],[OriginTerminal],[IsNonStop],[BusCompanyID],[IsVip]) values(?,?,?,?,?,?)"
             ));
             statements.put(UPDATE, connection.prepareStatement(
-                    "update [Alibaba].[dbo].[BusTrip] a set a.FinalStop = ? , a.OriginTerminal = ? , a.IsNonStop = ? , a.BusCompanyID = ? , a.IsVip = ? where a.BusTripID = ?"
+                    "update [Alibaba].[dbo].[BusTrip] set FinalStop = ? , OriginTerminal = ? , IsNonStop = ? , BusCompanyID = ? , IsVip = ? where BusTripID = ?"
             ));
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
